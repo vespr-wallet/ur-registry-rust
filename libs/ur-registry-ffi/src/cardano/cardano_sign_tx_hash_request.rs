@@ -2,6 +2,8 @@ use serde::Deserialize;
 use serde_json::json;
 use ur_registry::cardano::cardano_sign_tx_hash_request::CardanoSignTxHashRequest;
 use ur_registry::crypto_key_path::CryptoKeyPath;
+use ur_registry::traits::RegistryItem;
+use ur_registry::traits::To;
 use uuid::Uuid;
 
 use crate::{
@@ -83,4 +85,23 @@ pub extern "C" fn cardano_sign_tx_hash_request_construct(
         CardanoSignTxHashRequest::new(Some(request_id), tx_hash, paths, origin, address_list);
     Response::success_object(Box::into_raw(Box::new(cardano_sign_tx_hash_request)) as PtrVoid)
         .c_ptr()
+}
+
+#[no_mangle]
+pub extern "C" fn cardano_sign_tx_hash_request_get_ur_encoder(cardano_sign_tx_hash_request: &mut CardanoSignTxHashRequest) -> PtrResponse {
+    let message = cardano_sign_tx_hash_request.to_bytes().unwrap();
+    let ur_encoder = ur::Encoder::new(
+        message.as_slice(),
+        200,
+        CardanoSignTxHashRequest::get_registry_type().get_type(),
+    )
+    .unwrap();
+    Response::success_object(Box::into_raw(Box::new(ur_encoder)) as PtrVoid).c_ptr()
+}
+
+#[no_mangle]
+pub extern "C" fn cardano_sign_tx_hash_request_get_request_id(cardano_sign_tx_hash_request: &mut CardanoSignTxHashRequest) -> PtrResponse {
+    cardano_sign_tx_hash_request.get_request_id().map_or(Response::success_null().c_ptr(), |id| {
+        Response::success_string(hex::encode(id)).c_ptr()
+    })
 }

@@ -7,6 +7,7 @@ use ur_registry::cardano::cardano_sign_cip8_data_request::{
     CardanoSignCip8DataRequest, Cip8AddressType,
 };
 use ur_registry::crypto_key_path::CryptoKeyPath;
+use ur_registry::traits::{RegistryItem, To};
 use uuid::Uuid;
 
 #[no_mangle]
@@ -116,4 +117,29 @@ pub extern "C" fn cardano_sign_cip8_data_request_construct(
     );
 
     Response::success_object(Box::into_raw(Box::new(request)) as PtrVoid).c_ptr()
+}
+
+#[no_mangle]
+pub extern "C" fn cardano_sign_cip8_data_request_get_ur_encoder(
+    cardano_sign_cip8_data_request: &mut CardanoSignCip8DataRequest,
+) -> PtrResponse {
+    let message = cardano_sign_cip8_data_request.to_bytes().unwrap();
+    let ur_encoder = ur::Encoder::new(
+        message.as_slice(),
+        200,
+        CardanoSignCip8DataRequest::get_registry_type().get_type(),
+    )
+    .unwrap();
+    Response::success_object(Box::into_raw(Box::new(ur_encoder)) as PtrVoid).c_ptr()
+}
+
+#[no_mangle]
+pub extern "C" fn cardano_sign_cip8_data_request_get_request_id(
+    cardano_sign_cip8_data_request: &mut CardanoSignCip8DataRequest,
+) -> PtrResponse {
+    cardano_sign_cip8_data_request
+        .get_request_id()
+        .map_or(Response::success_null().c_ptr(), |id| {
+            Response::success_string(hex::encode(id)).c_ptr()
+        })
 }
