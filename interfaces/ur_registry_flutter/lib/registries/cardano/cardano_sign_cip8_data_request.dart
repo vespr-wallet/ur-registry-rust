@@ -14,7 +14,7 @@ typedef NativeConstruct = Pointer<Response> Function(
   Pointer<Utf8>,
   Pointer<Utf8>,
   Pointer<Utf8>,
-  bool,
+  Bool,
   Pointer<Utf8>,
   Uint32,
 );
