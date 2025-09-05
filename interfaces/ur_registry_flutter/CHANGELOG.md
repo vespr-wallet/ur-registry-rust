@@ -1,3 +1,5 @@
+## 0.4.0-beta.4
+- Fix an build issue.
 ## 0.4.0-beta.3
 - Fix method not exported error and keep API consistency. 
 ## 0.4.0-beta.2
