@@ -1,3 +1,5 @@
+## 0.4.0-beta.6
+- Update ios Podspec
 ## 0.4.0-beta.5
 - Fix an existing ADA sign request related issue.
 ## 0.4.0-beta.4
