@@ -1,3 +1,5 @@
+## 0.4.0
+- Support Cardano sign message and CIP8 message.
 ## 0.4.0-beta.6
 - Update ios Podspec
 ## 0.4.0-beta.5
