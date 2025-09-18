@@ -771,7 +771,7 @@ dependencies = [
 [[package]]
 name = "ur-registry"
 version = "0.1.1"
-source = "git+https://git@github.com/KeystoneHQ/keystone-sdk-rust.git?tag=0.0.49#7a68d6578d9351acd78e4b3aa1c9f46d577846d7"
+source = "git+https://git@github.com/KeystoneHQ/keystone-sdk-rust.git?tag=0.0.51#67b1044f3d9b6f0cf947ec75c9ee2890c468dd5f"
 dependencies = [
  "bs58",
  "core2",

@@ -6,6 +6,7 @@ use serde_json::json;
 use ur_registry::cardano::cardano_catalyst_voting_registration::CardanoCatalystVotingRegistrationRequest;
 use ur_registry::cardano::cardano_delegation::CardanoDelegation;
 use ur_registry::crypto_key_path::CryptoKeyPath;
+use ur_registry::traits::{RegistryItem, To};
 use uuid::Uuid;
 
 #[no_mangle]
@@ -133,4 +134,29 @@ pub extern "C" fn cardano_catalyst_voting_registration_construct(
     );
 
     Response::success_object(Box::into_raw(Box::new(request)) as PtrVoid).c_ptr()
+}
+
+#[no_mangle]
+pub extern "C" fn cardano_catalyst_voting_registration_get_ur_encoder(
+    cardano_catalyst_voting_registration: &mut CardanoCatalystVotingRegistrationRequest,
+) -> PtrResponse {
+    let message = cardano_catalyst_voting_registration.to_bytes().unwrap();
+    let ur_encoder = ur::Encoder::new(
+        message.as_slice(),
+        200,
+        CardanoCatalystVotingRegistrationRequest::get_registry_type().get_type(),
+    )
+    .unwrap();
+    Response::success_object(Box::into_raw(Box::new(ur_encoder)) as PtrVoid).c_ptr()
+}
+
+#[no_mangle]
+pub extern "C" fn cardano_catalyst_voting_registration_get_request_id(
+    cardano_catalyst_voting_registration: &mut CardanoCatalystVotingRegistrationRequest,
+) -> PtrResponse {
+    cardano_catalyst_voting_registration
+        .get_request_id()
+        .map_or(Response::success_null().c_ptr(), |id| {
+            Response::success_string(hex::encode(id)).c_ptr()
+        })
 }

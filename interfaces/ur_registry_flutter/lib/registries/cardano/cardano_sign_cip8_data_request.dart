@@ -14,7 +14,7 @@ typedef NativeConstruct = Pointer<Response> Function(
   Pointer<Utf8>,
   Pointer<Utf8>,
   Pointer<Utf8>,
-  bool,
+  Bool,
   Pointer<Utf8>,
   Uint32,
 );
@@ -70,8 +70,8 @@ class CardanoSignCip8DataRequest extends NativeObject {
   // address_bench32: PtrString,
   // address_type: u32,
   CardanoSignCip8DataRequest.factory(
-    List<int> signData,
     String mfp,
+    List<int> signData,
     String derivationPath,
     String xpub,
     String origin,

@@ -6,6 +6,7 @@ SHELL := /bin/bash
 # Check for required environment
 check_env:
 	@if [ -z "$$ANDROID_NDK_HOME" ]; then \
+		echo "$$ANDROID_NDK_HOME"; \
 		echo "Error: ANDROID_NDK_HOME not set. Please create .ndk_home file from .ndk_home.example"; \
 		exit 1; \
 	fi
